@@ -9,7 +9,7 @@ for i in range(10):
         print("El id introducido no es único, por favor, introduzca uno nuevo.")
 
     while True:
-        name:str = input("Introduzca el nombre del producto: ")
+        name:str = input("Introduzca el nombre del producto: ").strip()
         if name.strip():
             break
         print("El nombre no puede estar vacío.")
@@ -72,3 +72,33 @@ for current_state in target_states:
         if item["state"] == current_state:
             print(f"Nombre: {item['name']}\nID: {item['item_id']}\nCategoría: {item['category']}\nPrecio: {item['price']:.2f}\nEstado: {item['state']}\nDescripción: {item['description']}\n {'='*10}")
 
+while True:
+    try:
+        min_price = float(input("Introduzca el precio mínimo por el que desea filtrar: ").replace(',','.'))
+        if min_price <= 0:
+            raise ValueError
+        break
+    except:
+        print("Debe introducir un valor numérico y superior a 0.")
+
+if not any(item["price"] > min_price for item in catalog):
+    print("No se han encontrado resultados para este filtro.")
+
+for item in catalog:
+    if item["price"] > min_price:
+        print(f"Nombre: {item['name']}\nID: {item['item_id']}\nCategoría: {item['category']}\nPrecio: {item['price']:.2f}\nEstado: {item['state']}\nDescripción: {item['description']}\n {'='*10}")
+
+print("\n=== REGLA DE PUBLICACIÓN ===")
+for item in catalog:
+    can_publish = item["price"] > 0 and item["state"].lower() == "disponible"
+    print(f"{item['name']}: {'Puede publicarse' if can_publish else 'No puede publicarse'}")
+
+print("\n=== REGLA DE REVISIÓN ===")
+for item in catalog:
+    needs_review = item["state"].lower() == "reservado" or item["state"].lower() == "vendido"
+    print(f"{item['name']}: {'Requiere revisión' if needs_review else 'No requiere revisión'}")
+
+print("\n=== PIEZAS NO VENDIDAS ===")
+for item in catalog:
+    if item["state"].lower() != "vendido":
+        print(f"{item['name']} - ID: {item['item_id']}")
