@@ -85,3 +85,45 @@ print("\n=== PIEZAS NO VENDIDAS ===")
 for item in catalog:
     if item["state"].lower() != "vendido":
         print(f"{item['name']} - ID: {item['item_id']}")
+
+item = catalog[0]
+
+print("\n=== CONCATENACIÓN ===")
+print(
+    "Nombre: " + item["name"] +
+    "\nID: " + item["item_id"] +
+    "\nCategoría: " + item["category"] +
+    "\nEstado: " + item["state"]
+)
+
+print("\n=== INTERPOLACIÓN ===")
+print(
+    f"Nombre: {item['name']}\n"
+    f"ID: {item['item_id']}\n"
+    f"Categoría: {item['category']}\n"
+    f"Precio: {item['price']:.2f}€\n"
+    f"Estado: {item['state']}"
+)
+
+tags_input = input("\nIntroduzca etiquetas separadas por comas: ")
+tags = tags_input.split(",")
+
+print("Etiquetas:")
+for tag in tags:
+    print(tag.strip())
+
+replaced_description = item["description"].replace("usada", "certificada")
+print("\n=== DESCRIPCIÓN MODIFICADA ===")
+print(replaced_description)
+
+username = input("\nIntroduzca su nombre de usuario: ")
+
+username = username.strip()
+
+print(f"Sin espacios: {username}")
+print(f"Minúsculas: {username.lower()}")
+print(f"Mayúsculas: {username.upper()}")
+print(f"Formato título: {username.title()}")
+
+normalized_name = item["name"].strip().title()
+print(f"\nNombre normalizado de la pieza: {normalized_name}")
