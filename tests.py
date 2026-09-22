@@ -181,3 +181,22 @@ while True:
 
     else:
         print("Opción no válida. Introduzca una opción del 1 al 4.")
+
+available = sum(1 for item in catalog if item["state"].lower() == "disponible")
+reserved = sum(1 for item in catalog if item["state"].lower() == "reservado")
+sold = sum(1 for item in catalog if item["state"].lower() == "vendido")
+total_items = len(catalog)
+total_price = sum(item["price"] for item in catalog)
+average_price = total_price / total_items
+
+print("\n=== MÉTRICAS DEL CATÁLOGO ===")
+print(f"Piezas disponibles: {available}")
+print(f"Piezas reservadas: {reserved}")
+print(f"Piezas vendidas: {sold}")
+print(f"Piezas totales: {total_items}")
+print(f"Suma total de precios: {total_price:.2f}€")
+print(f"Precio promedio: {average_price:.2f}€")
+
+print("\n=== PIEZAS ENUMERADAS ===")
+for position, item in enumerate(catalog, start=1):
+    print(f"{position}. {item['name']}")
