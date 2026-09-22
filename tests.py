@@ -1,5 +1,5 @@
 catalog = []
-for i in range(10):
+for i in range(1):
     while True:
         new_id:str = input("Introduzca un id único: ")
         if not any(item["item_id"] == new_id for item in catalog):
@@ -50,4 +50,14 @@ for i in range(10):
         "description": description
     }
     catalog.append(item)
-    
+
+categories = {item["category"] for item in catalog}
+for item in catalog:
+    print(f"Nombre: {item['name']}\nID: {item['item_id']}\nCategoría: {item['category']}\nPrecio: {item['price']:.2f}\nEstado: {item['state']}\nDescripción: {item['description']}")
+print(f"=== INFORMACIÓN GENERAL DEL CATÁLOGO ===")
+print(f"Número total de piezas: {len(catalog)}")
+print(f"Listado de las categorías únicas: {', '.join(categories)}")
+print(f"Cantidad de categorías diferentes: {len(categories)}")
+
+# * ===== NIVEL 2 ===== *
+
