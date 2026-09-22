@@ -144,3 +144,57 @@ print(f"Formato título: {username.title()}")
 
 normalized_name = item["name"].strip().title()
 print(f"\nNombre normalizado de la pieza: {normalized_name}")
+
+while True:
+    print("\n=== MENÚ DEL CATÁLOGO ===")
+    print("1. Mostrar todas las piezas")
+    print("2. Mostrar solo las piezas disponibles")
+    print("3. Mostrar el precio promedio")
+    print("4. Salir")
+
+    option = input("Seleccione una opción: ").strip()
+
+    if option == "1":
+        print("\n=== TODAS LAS PIEZAS ===")
+        for position, item in enumerate(catalog, start=1):
+            print(
+                f"{position}. {item['name']}\n"
+                f"ID: {item['item_id']}\n"
+                f"Categoría: {item['category']}\n"
+                f"Precio: {item['price']:.2f}€\n"
+                f"Estado: {item['state']}\n"
+                f"Descripción: {item['description']}\n"
+                f"{'=' * 10}"
+            )
+
+    elif option == "2":
+        print("\n=== PIEZAS DISPONIBLES ===")
+        found = False
+
+        for item in catalog:
+            if item["state"].lower() == "disponible":
+                found = True
+                print(
+                    f"Nombre: {item['name']}\n"
+                    f"ID: {item['item_id']}\n"
+                    f"Categoría: {item['category']}\n"
+                    f"Precio: {item['price']:.2f}€\n"
+                    f"Estado: {item['state']}\n"
+                    f"Descripción: {item['description']}\n"
+                    f"{'=' * 10}"
+                )
+
+        if not found:
+            print("No se han encontrado piezas disponibles.")
+
+    elif option == "3":
+        total_price = sum(item["price"] for item in catalog)
+        average_price = total_price / len(catalog)
+        print(f"\nPrecio promedio del catálogo: {average_price:.2f}€")
+
+    elif option == "4":
+        print("\nGracias por utilizar el catálogo. ¡Hasta luego!")
+        break
+
+    else:
+        print("Opción no válida. Introduzca una opción del 1 al 4.")
