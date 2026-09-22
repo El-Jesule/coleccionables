@@ -53,11 +53,21 @@ for i in range(1):
 
 categories = {item["category"] for item in catalog}
 for item in catalog:
-    print(f"Nombre: {item['name']}\nID: {item['item_id']}\nCategoría: {item['category']}\nPrecio: {item['price']:.2f}\nEstado: {item['state']}\nDescripción: {item['description']}")
+    print(f"Nombre: {item['name']}\nID: {item['item_id']}\nCategoría: {item['category']}\nPrecio: {item['price']:.2f}\nEstado: {item['state']}\nDescripción: {item['description']}\n{'='*10}")
 print(f"=== INFORMACIÓN GENERAL DEL CATÁLOGO ===")
 print(f"Número total de piezas: {len(catalog)}")
 print(f"Listado de las categorías únicas: {', '.join(categories)}")
 print(f"Cantidad de categorías diferentes: {len(categories)}")
 
 # * ===== NIVEL 2 ===== *
+
+target_states:tuple = ("disponible", "reservado", "vendido")
+for current_state in target_states:
+    print(f"\n=== PIEZAS EN ESTADO: {current_state.upper()} ===")
+    if not any(item["state"] == current_state for item in catalog):
+        print("No se han encontrado resultados para este filtro.")
+    for item in catalog:
+        if item["state"] == current_state:
+            print(f"Nombre: {item['name']}\nID: {item['item_id']}\nCategoría: {item['category']}\nPrecio: {item['price']:.2f}\nEstado: {item['state']}\nDescripción: {item['description']}\n {'='*10}")
+
 
