@@ -26,3 +26,14 @@ def list_pieces(catalog):
         raise ValueError("El catálogo debe ser una lista.")
 
     return [piece["name"] for piece in catalog]
+
+
+def find_piece_by_id(catalog, id):
+    if not isinstance(catalog, list):
+        raise ValueError("El catálogo debe ser una lista.")
+
+    for piece in catalog:
+        if piece["id"] == id:
+            return piece
+
+    return None
