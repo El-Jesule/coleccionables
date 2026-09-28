@@ -1,6 +1,13 @@
 import validations
 
 
+def _ensure_catalog_is_list(catalog):
+    if not isinstance(catalog, list):
+        raise ValueError("El catálogo debe ser una lista.")
+
+    return True
+
+
 def add_piece(id, name, category, price, status, description):
     validations.validate_not_empty(id, "id")
     validations.validate_not_empty(name, "name")
@@ -22,18 +29,33 @@ def add_piece(id, name, category, price, status, description):
 
 
 def list_pieces(catalog):
-    if not isinstance(catalog, list):
-        raise ValueError("El catálogo debe ser una lista.")
+    _ensure_catalog_is_list(catalog)
 
     return [piece["name"] for piece in catalog]
 
 
 def find_piece_by_id(catalog, id):
-    if not isinstance(catalog, list):
-        raise ValueError("El catálogo debe ser una lista.")
+    _ensure_catalog_is_list(catalog)
 
     for piece in catalog:
         if piece["id"] == id:
             return piece
 
     return None
+
+
+def remove_piece(catalog, id):
+    _ensure_catalog_is_list(catalog)
+
+    piece = find_piece_by_id(catalog, id)
+
+    try:
+        if piece is None:
+            raise ValueError(f"No se encontró una pieza con el id '{id}'.")
+
+        catalog.remove(piece)
+
+    except ValueError:
+        return False
+
+    return True
