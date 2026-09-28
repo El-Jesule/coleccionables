@@ -1,3 +1,4 @@
+import catalog
 print("Bienvenido al catálogo de piezas coleccionables.")
 
 catalog = []
