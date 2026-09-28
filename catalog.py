@@ -59,3 +59,15 @@ def remove_piece(catalog, id):
         return False
 
     return True
+
+
+def get_catalog_summary(catalog):
+    _ensure_catalog_is_list(catalog)
+
+    summary = {}
+
+    for piece in catalog:
+        category = piece["category"]
+        summary[category] = summary.get(category, 0) + 1
+
+    return summary
