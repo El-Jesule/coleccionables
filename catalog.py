@@ -109,3 +109,14 @@ def filter_by_min_price(catalog, min_price):
         for piece in catalog
         if piece["price"] > numeric_min_price
     ]
+
+
+def get_average_price(catalog):
+    _ensure_catalog_is_list(catalog)
+
+    if not catalog:
+        return 0
+
+    total = sum(piece["price"] for piece in catalog)
+
+    return total / len(catalog)
