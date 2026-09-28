@@ -19,3 +19,10 @@ def add_piece(id, name, category, price, status, description):
     }
 
     return piece
+
+
+def list_pieces(catalog):
+    if not isinstance(catalog, list):
+        raise ValueError("El catálogo debe ser una lista.")
+
+    return [piece["name"] for piece in catalog]
