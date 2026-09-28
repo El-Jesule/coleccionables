@@ -94,3 +94,18 @@ def filter_by_status(catalog, status):
     validations.validate_status(status)
 
     return [piece for piece in catalog if piece["status"] == status]
+
+
+def filter_by_min_price(catalog, min_price):
+    _ensure_catalog_is_list(catalog)
+
+    try:
+        numeric_min_price = float(min_price)
+    except (TypeError, ValueError):
+        raise ValueError("El precio mínimo debe ser un valor numérico.")
+
+    return [
+        piece
+        for piece in catalog
+        if piece["price"] > numeric_min_price
+    ]
