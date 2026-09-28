@@ -1,361 +1,117 @@
 import catalog
-print("Bienvenido al catálogo de piezas coleccionables.")
-
-catalog = []
-
-for i in range(10):
-    while True:
-        id = input("Introduzca un id único: ").strip()
-
-        if not id:
-            print("El id no puede estar vacío, por favor, introduzca uno nuevo.")
-            continue
-
-        if any(item["id"] == id for item in catalog):
-            print("El id introducido no es único, por favor, introduzca uno nuevo.")
-            continue
-
-        break
-
-    while True:
-        name = input("Introduzca el nombre del producto: ").strip()
-
-        if name:
-            break
-
-        print("El nombre no puede estar vacío.")
-
-    while True:
-        category = input("Introduzca la categoría del producto: ").strip()
-
-        if category:
-            category = category.title()
-            break
-
-        print("La categoría no puede estar vacía.")
-
-    while True:
-        try:
-            price = float(
-                input("Introduzca el precio del producto: ").replace(",", ".")
-            )
-
-            if price <= 0:
-                raise ValueError
-
-            break
-
-        except ValueError:
-            print("Debe introducir un valor numérico y superior a 0.")
-
-    while True:
-        status = input(
-            "Introduzca uno de los tres estados posibles "
-            "(disponible, reservada o vendida): "
-        ).lower().strip()
-
-        if status in ("disponible", "reservada", "vendida"):
-            break
-
-        print(
-            "Debe indicar un estado válido: "
-            "disponible, reservada o vendida."
-        )
-
-    while True:
-        description = input(
-            "Introduzca la descripción del producto. "
-            "Recuerde que debe incluir 'usada' o 'certificada': "
-        ).strip()
-
-        if "usada" in description.lower() or "certificada" in description.lower():
-            break
-
-        print(
-            "La descripción debe contener la palabra "
-            "'usada' o 'certificada'."
-        )
-
-    item = {
-        "id": id,
-        "name": name,
-        "category": category,
-        "price": price,
-        "status": status,
-        "description": description
-    }
-
-    catalog.append(item)
 
 
-# ===== PARTE 4 Y 5 =====
-
-categories = {item["category"] for item in catalog}
-
-for item in catalog:
+def show_piece(piece):
     print(
-        f"Nombre: {item['name']}\n"
-        f"ID: {item['id']}\n"
-        f"Categoría: {item['category']}\n"
-        f"Precio: {item['price']:.2f}\n"
-        f"Estado: {item['status']}\n"
-        f"Descripción: {item['description']}\n"
+        f"Nombre: {piece['name']}\n"
+        f"ID: {piece['id']}\n"
+        f"Categoría: {piece['category']}\n"
+        f"Precio: {piece['price']:.2f}€\n"
+        f"Estado: {piece['status']}\n"
+        f"Descripción: {piece['description']}\n"
         f"{'=' * 10}"
     )
 
-print("=== INFORMACIÓN GENERAL DEL CATÁLOGO ===")
-print(f"Número total de piezas: {len(catalog)}")
-print(f"Listado de las categorías únicas: {', '.join(categories)}")
-print(f"Cantidad de categorías diferentes: {len(categories)}")
 
-
-# ===== NIVEL 2 - PARTE 6 =====
-
-target_statuses = ("disponible", "reservada", "vendida")
-
-for current_status in target_statuses:
-    print(f"\n=== PIEZAS EN ESTADO: {current_status.upper()} ===")
-
-    if not any(item["status"] == current_status for item in catalog):
-        print("No se han encontrado resultados para este filtro.")
-
-    for item in catalog:
-        if item["status"] == current_status:
-            print(
-                f"Nombre: {item['name']}\n"
-                f"ID: {item['id']}\n"
-                f"Categoría: {item['category']}\n"
-                f"Precio: {item['price']:.2f}\n"
-                f"Estado: {item['status']}\n"
-                f"Descripción: {item['description']}\n"
-                f"{'=' * 10}"
+def register_piece():
+    while True:
+        try:
+            piece = catalog.add_piece(
+                id=input("Introduzca un id: ").strip(),
+                name=input("Introduzca el nombre: ").strip(),
+                category=input("Introduzca la categoría: ").strip(),
+                price=input("Introduzca el precio: ").replace(",", ".").strip(),
+                status=input(
+                    "Introduzca el estado "
+                    "(disponible, reservada o vendida): "
+                ).strip().lower(),
+                description=input(
+                    "Introduzca la descripción "
+                    "(debe incluir 'usada' o 'certificada'): "
+                ).strip(),
             )
 
+            return piece
 
-# ===== PARTE 7 =====
+        except ValueError as error:
+            print(f"Error: {error}")
+            print("Vuelva a introducir los datos de la pieza.\n")
 
-while True:
-    try:
-        min_price = float(
-            input("Introduzca el precio mínimo por el que desea filtrar: ")
-            .replace(",", ".")
-        )
 
-        if min_price <= 0:
-            raise ValueError
+def main():
+    pieces = []
 
-        break
+    while True:
+        print("\n=== MENÚ DEL CATÁLOGO ===")
+        print("1. Agregar una pieza")
+        print("2. Mostrar todas las piezas")
+        print("3. Mostrar piezas disponibles")
+        print("4. Mostrar el precio promedio")
+        print("5. Buscar una pieza por identificador")
+        print("6. Eliminar una pieza")
+        print("7. Salir")
 
-    except ValueError:
-        print("Debe introducir un valor numérico y superior a 0.")
+        option = input("Seleccione una opción: ").strip()
 
+        try:
+            if option == "1":
+                piece = register_piece()
+                pieces.append(piece)
+                print("\nPieza agregada correctamente.")
+                show_piece(piece)
 
-if not any(item["price"] > min_price for item in catalog):
-    print("No se han encontrado resultados para este filtro.")
+            elif option == "2":
+                if not catalog.list_pieces(pieces):
+                    print("El catálogo está vacío.")
+                else:
+                    print("\n=== TODAS LAS PIEZAS ===")
 
-for item in catalog:
-    if item["price"] > min_price:
-        print(
-            f"Nombre: {item['name']}\n"
-            f"ID: {item['id']}\n"
-            f"Categoría: {item['category']}\n"
-            f"Precio: {item['price']:.2f}\n"
-            f"Estado: {item['status']}\n"
-            f"Descripción: {item['description']}\n"
-            f"{'=' * 10}"
-        )
+                    for position, piece in enumerate(pieces, start=1):
+                        print(f"{position}.")
+                        show_piece(piece)
 
+            elif option == "3":
+                available = catalog.filter_by_status(pieces, "disponible")
 
-# ===== PARTE 8 =====
+                if not available:
+                    print("No se han encontrado piezas disponibles.")
+                else:
+                    print("\n=== PIEZAS DISPONIBLES ===")
 
-print("\n=== REGLA DE PUBLICACIÓN ===")
+                    for piece in available:
+                        show_piece(piece)
 
-for item in catalog:
-    can_publish = (
-        item["price"] > 0
-        and item["status"] == "disponible"
-    )
+            elif option == "4":
+                average = catalog.get_average_price(pieces)
+                print(f"\nPrecio promedio del catálogo: {average:.2f}€")
 
-    print(
-        f"{item['name']}: "
-        f"{'Puede publicarse' if can_publish else 'No puede publicarse'}"
-    )
+            elif option == "5":
+                id = input("Introduzca el id a buscar: ").strip()
+                piece = catalog.find_piece_by_id(pieces, id)
 
+                if piece is None:
+                    print(f"No se encontró ninguna pieza con el id '{id}'.")
+                else:
+                    show_piece(piece)
 
-print("\n=== REGLA DE REVISIÓN ===")
+            elif option == "6":
+                id = input("Introduzca el id a eliminar: ").strip()
 
-for item in catalog:
-    needs_review = (
-        item["status"] == "reservada"
-        or item["status"] == "vendida"
-    )
+                if catalog.remove_piece(pieces, id):
+                    print(f"La pieza con id '{id}' fue eliminada.")
+                else:
+                    print(f"No se encontró ninguna pieza con el id '{id}'.")
 
-    print(
-        f"{item['name']}: "
-        f"{'Requiere revisión' if needs_review else 'No requiere revisión'}"
-    )
+            elif option == "7":
+                print("\nGracias por utilizar el catálogo. ¡Hasta luego!")
+                break
 
+            else:
+                print("Opción no válida. Introduzca una opción del 1 al 7.")
 
-print("\n=== PIEZAS NO VENDIDAS ===")
+        except ValueError as error:
+            print(f"Error: {error}")
 
-for item in catalog:
-    if item["status"] != "vendida":
-        print(f"{item['name']} - ID: {item['id']}")
 
-
-# ===== PARTE 9 =====
-
-item = catalog[0]
-
-print("\n=== CONCATENACIÓN ===")
-
-print(
-    "Nombre: " + item["name"] +
-    "\nID: " + item["id"] +
-    "\nCategoría: " + item["category"] +
-    "\nEstado: " + item["status"]
-)
-
-
-print("\n=== INTERPOLACIÓN ===")
-
-print(
-    f"Nombre: {item['name']}\n"
-    f"ID: {item['id']}\n"
-    f"Categoría: {item['category']}\n"
-    f"Precio: {item['price']:.2f}€\n"
-    f"Estado: {item['status']}"
-)
-
-
-tags_input = input("\nIntroduzca etiquetas separadas por comas: ")
-tags = tags_input.split(",")
-
-print("Etiquetas:")
-
-for tag in tags:
-    print(tag.strip())
-
-
-replaced_description = item["description"].replace(
-    "usada",
-    "certificada"
-)
-
-print("\n=== DESCRIPCIÓN MODIFICADA ===")
-print(replaced_description)
-
-
-username = input("\nIntroduzca su nombre de usuario: ")
-
-username = username.strip()
-
-print(f"Sin espacios: {username}")
-print(f"Minúsculas: {username.lower()}")
-print(f"Mayúsculas: {username.upper()}")
-print(f"Formato título: {username.title()}")
-
-
-normalized_name = item["name"].strip().title()
-
-print(f"\nNombre normalizado de la pieza: {normalized_name}")
-
-
-# ===== NIVEL 3 - PARTE 10 =====
-
-while True:
-    print("\n=== MENÚ DEL CATÁLOGO ===")
-    print("1. Mostrar todas las piezas")
-    print("2. Mostrar solo las piezas disponibles")
-    print("3. Mostrar el precio promedio")
-    print("4. Salir")
-
-    option = input("Seleccione una opción: ").strip()
-
-    if option == "1":
-        print("\n=== TODAS LAS PIEZAS ===")
-
-        for position, item in enumerate(catalog, start=1):
-            print(
-                f"{position}. {item['name']}\n"
-                f"ID: {item['id']}\n"
-                f"Categoría: {item['category']}\n"
-                f"Precio: {item['price']:.2f}€\n"
-                f"Estado: {item['status']}\n"
-                f"Descripción: {item['description']}\n"
-                f"{'=' * 10}"
-            )
-
-    elif option == "2":
-        print("\n=== PIEZAS DISPONIBLES ===")
-
-        found = False
-
-        for item in catalog:
-            if item["status"] == "disponible":
-                found = True
-
-                print(
-                    f"Nombre: {item['name']}\n"
-                    f"ID: {item['id']}\n"
-                    f"Categoría: {item['category']}\n"
-                    f"Precio: {item['price']:.2f}€\n"
-                    f"Estado: {item['status']}\n"
-                    f"Descripción: {item['description']}\n"
-                    f"{'=' * 10}"
-                )
-
-        if not found:
-            print("No se han encontrado piezas disponibles.")
-
-    elif option == "3":
-        total_price = sum(item["price"] for item in catalog)
-        average_price = total_price / len(catalog)
-
-        print(f"\nPrecio promedio del catálogo: {average_price:.2f}€")
-
-    elif option == "4":
-        print("\nGracias por utilizar el catálogo. ¡Hasta luego!")
-        break
-
-    else:
-        print("Opción no válida. Introduzca una opción del 1 al 4.")
-
-
-# ===== PARTE 11 =====
-
-available = sum(
-    1 for item in catalog
-    if item["status"] == "disponible"
-)
-
-reserved = sum(
-    1 for item in catalog
-    if item["status"] == "reservada"
-)
-
-sold = sum(
-    1 for item in catalog
-    if item["status"] == "vendida"
-)
-
-total_items = len(catalog)
-
-total_price = sum(item["price"] for item in catalog)
-
-average_price = total_price / total_items
-
-
-print("\n=== MÉTRICAS DEL CATÁLOGO ===")
-print(f"Piezas disponibles: {available}")
-print(f"Piezas reservadas: {reserved}")
-print(f"Piezas vendidas: {sold}")
-print(f"Piezas totales: {total_items}")
-print(f"Suma total de precios: {total_price:.2f}€")
-print(f"Precio promedio: {average_price:.2f}€")
-
-
-print("\n=== PIEZAS ENUMERADAS ===")
-
-for position, item in enumerate(catalog, start=1):
-    print(f"{position}. {item['name']}")
+if __name__ == "__main__":
+    main()
