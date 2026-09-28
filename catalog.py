@@ -87,3 +87,10 @@ def piece_exists(catalog, id):
     _ensure_catalog_is_list(catalog)
 
     return find_piece_by_id(catalog, id) is not None
+
+
+def filter_by_status(catalog, status):
+    _ensure_catalog_is_list(catalog)
+    validations.validate_status(status)
+
+    return [piece for piece in catalog if piece["status"] == status]
