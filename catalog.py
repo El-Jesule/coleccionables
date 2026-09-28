@@ -71,3 +71,13 @@ def get_catalog_summary(catalog):
         summary[category] = summary.get(category, 0) + 1
 
     return summary
+
+
+def get_pieces_by_category(catalog, category):
+    _ensure_catalog_is_list(catalog)
+
+    return [
+        piece["name"]
+        for piece in catalog
+        if piece["category"] == category
+    ]
