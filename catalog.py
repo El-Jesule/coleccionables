@@ -81,3 +81,9 @@ def get_pieces_by_category(catalog, category):
         for piece in catalog
         if piece["category"] == category
     ]
+
+
+def piece_exists(catalog, id):
+    _ensure_catalog_is_list(catalog)
+
+    return find_piece_by_id(catalog, id) is not None
