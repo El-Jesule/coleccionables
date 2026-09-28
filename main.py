@@ -13,11 +13,17 @@ def show_piece(piece):
     )
 
 
-def register_piece():
+def register_piece(pieces):
     while True:
+        id = input("Introduzca un id: ").strip()
+
+        if catalog.piece_exists(pieces, id):
+            print("El id introducido no es único, por favor, introduzca uno nuevo.")
+            continue
+
         try:
             piece = catalog.add_piece(
-                id=input("Introduzca un id: ").strip(),
+                id=id,
                 name=input("Introduzca el nombre: ").strip(),
                 category=input("Introduzca la categoría: ").strip(),
                 price=input("Introduzca el precio: ").replace(",", ".").strip(),
@@ -55,7 +61,7 @@ def main():
 
         try:
             if option == "1":
-                piece = register_piece()
+                piece = register_piece(pieces)
                 pieces.append(piece)
                 print("\nPieza agregada correctamente.")
                 show_piece(piece)
